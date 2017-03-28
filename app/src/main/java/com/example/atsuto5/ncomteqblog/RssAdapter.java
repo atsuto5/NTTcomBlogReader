@@ -23,14 +23,11 @@ public class RssAdapter extends ArrayAdapter<ItemBeans> {
     private LayoutInflater mInflater;
     private ArrayList<ItemBeans> itemList = new ArrayList<>();
     private String TAG = "RssAdapter";
-    private static final String URL_KEY = "URL";
-    private static final String PACKAGE_NAME = "com.example.atsuto5.yahoo_rss_reader";
-    private static final String WebViewActivity_NAME = "com.example.atsuto5.yahoo_rss_reader.WebViewActivity";
     private Context mContext;
 
     static class ViewHolder{
         TextView titleText;
-        Button urlButton;
+        TextView subText;
         ImageView thumbNailView;
     }
 
@@ -51,7 +48,7 @@ public class RssAdapter extends ArrayAdapter<ItemBeans> {
             //ViewHolderを作成
             holder = new ViewHolder();
             holder.titleText = (TextView) view.findViewById(R.id.titleTextView);
-            holder.urlButton = (Button) view.findViewById(R.id.urlButton);
+            holder.subText = (TextView) view.findViewById(R.id.urlButton);
             holder.thumbNailView = (ImageView) view.findViewById(R.id.thumbNailView);
             //holder.userLikeView = (ImageView) view.findViewById(R.id.userLikeView);
             view.setTag(holder);
@@ -64,19 +61,19 @@ public class RssAdapter extends ArrayAdapter<ItemBeans> {
             if(item != null){
 
                 holder.titleText.setText(item.getTitle());
-                holder.urlButton.setText(item.getUrl());
-                holder.urlButton.setOnClickListener(new View.OnClickListener()  {
-                    //URLをタップしたときWebViewActivityに遷移する
-                    public void onClick(View v) {
-
-                        Intent webViewIntent = new Intent();
-                        webViewIntent.setClassName(PACKAGE_NAME,WebViewActivity_NAME);
-                        webViewIntent.putExtra(URL_KEY, item.getUrl());
-                        Log.i(TAG, "onClick: " + item.getUrl());
-                        mContext.startActivity(webViewIntent);
-
-                    }
-                });
+                holder.subText.setText(item.getSubTitle());
+//                holder.urlButton.setOnClickListener(new View.OnClickListener()  {
+//                    //URLをタップしたときWebViewActivityに遷移する
+//                    public void onClick(View v) {
+//
+//                        Intent webViewIntent = new Intent();
+//                        webViewIntent.setClassName(PACKAGE_NAME,WebViewActivity_NAME);
+//                        webViewIntent.putExtra(URL_KEY, item.getUrl());
+//                        Log.i(TAG, "onClick: " + item.getUrl());
+//                        mContext.startActivity(webViewIntent);
+//
+//                    }
+//                });
 
                 holder.thumbNailView.setImageBitmap(item.getThumNail());
             }

@@ -7,18 +7,18 @@ import android.graphics.Bitmap;
  */
 public class ItemBeans {
     private String mTitle;
-    private String mUrl;
+    private String mSubTitle;
     private String mThumbNailUrl;
     private Bitmap mThumbNail;
-    //private boolean mLikeFlag = true;
+    private String mLinkURL;
 
 
     public void setTitle(String title) {
         this.mTitle = title;
     }
 
-    public void setUrl(String url) {
-        this.mUrl = url;
+    public void setSubTitle(String subTitle) {
+        this.mSubTitle = subTitle;
     }
 
     public void setThumbNailUrl(String thumbNailUrl) {
@@ -29,16 +29,16 @@ public class ItemBeans {
         this.mThumbNail = thumbNail;
     }
 
-//    public void setLikeFlag(boolean flag) {
-//        this.mLikeFlag = flag;
-//    }
+    public void setLinkURL(String linkURL) {
+        this.mLinkURL = linkURL;
+    }
 
     public String getTitle() {
         return this.mTitle;
     }
 
-    public String getUrl() {
-        return this.mUrl;
+    public String getSubTitle() {
+        return this.mSubTitle;
         }
 
     public String getThumbNailUrl() {
@@ -49,7 +49,8 @@ public class ItemBeans {
         return this.mThumbNail;
     }
 
-//    public boolean getLikeflag() {
-//        return this.mLikeFlag;
-//    }
+    public String getLinkURL() {
+        return this.mLinkURL;
+    }
+
 }

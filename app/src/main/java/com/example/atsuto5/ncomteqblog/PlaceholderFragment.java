@@ -1,15 +1,19 @@
 package com.example.atsuto5.ncomteqblog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.example.atsuto5.ncomteqblog.BackgroundTask.ThumbnailLoadTask;
 
 /**
  * Created by Atsuto5 on 2017/03/20.
@@ -20,6 +24,14 @@ public class PlaceholderFragment extends Fragment {
     private String mParam;
     private OnFragmentInteractionListener mListener;
     public static WebView webView;
+    private RssAdapter mRssAdapter;
+    private ListView mRssList;
+    private MainActivity mMainActivity;
+    private static final String URL_KEY = "URL";
+    private static final String PACKAGE_NAME = "com.example.atsuto5.ncomteqblog";
+    private static final String WebViewActivity_NAME = "com.example.atsuto5.ncomteqblog.WebViewActivity";
+    private final String TAG = "OnItemSelected";
+
 
     // コンストラクタ
     public PlaceholderFragment() {
@@ -47,38 +59,50 @@ public class PlaceholderFragment extends Fragment {
         // Inflate the layout for this fragment
         int page = getArguments().getInt(ARG_PARAM, 0);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        webView = (WebView)view.findViewById(R.id.textView);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient(){
+
+        mMainActivity = (MainActivity) getActivity();
+        mRssAdapter = new RssAdapter(mMainActivity, R.layout.rss_beans);
+        mRssList = (ListView) view.findViewById(R.id.Rss_ListView);
+
+        mRssList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url){
-                return false;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                ItemBeans item = (ItemBeans) listView.getItemAtPosition(position);
+                Intent webViewIntent = new Intent();
+                webViewIntent.setClassName(PACKAGE_NAME,WebViewActivity_NAME);
+                webViewIntent.putExtra(URL_KEY, "https://developer.ntt.com" + item.getLinkURL());
+                Log.i(TAG, "onClick: " + item.getLinkURL());
+                getActivity().startActivity(webViewIntent);
             }
         });
 
+
+        ThumbnailLoadTask thumbnailLoadTask = new ThumbnailLoadTask(mRssList, mRssAdapter, mMainActivity);
+
         switch (page) {
             case 1 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01");
                 break;
 
             case 2 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01?page=1");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01?page=1");
                 break;
 
             case 3 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01?page=2");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01?page=2");
                 break;
 
             case 4 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01?page=3");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01?page=3");
                 break;
 
             case 5 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01?page=4");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01?page=4");
                 break;
 
             case 6 :
-                webView.loadUrl("https://developer.ntt.com/ja/blog/cat01?page=5");
+                thumbnailLoadTask.execute("https://developer.ntt.com/ja/blog/cat01?page=5");
                 break;
         }
         return view;
@@ -109,9 +133,5 @@ public class PlaceholderFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
-    }
-
-    public WebView getWebView () {
-        return webView;
     }
 }
